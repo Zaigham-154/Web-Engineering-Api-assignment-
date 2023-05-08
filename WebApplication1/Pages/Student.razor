@@ -1,0 +1,63 @@
+﻿@page "/Student"
+
+<h3>Add Employee</h3>
+@using System.ComponentModel.DataAnnotations
+@using Microsoft.EntityFrameworkCore
+@using WebApplication1.Data
+
+
+
+
+                            <EditForm Model="@_student" OnValidSubmit="HandleValidSubmit">
+                                <DataAnnotationsValidator />
+                                <ValidationSummary />
+
+                              
+                                                <input @bind="_student.Name" type="text" id="form3Example1m"  placeholder="First name" name="Name" />
+                                          
+                                                <input @bind="_student.Department" type="text" id="form3Example1n"  placeholder="Last name" name="Department " />
+    <input @bind="_student.Present" type="text" id="form3Example1n"  placeholder="Last name" name="Present " />
+                                            
+                                        <button type="submit" class="btn btn-primary btn-lg ms-2" style="margin-left: 10px">Submit form</button>
+                                   
+                            </EditForm>
+                       
+  
+<br />
+<br />
+@code {
+    public class student
+    {
+        [Required]
+        [StringLength(10, ErrorMessage = "Name is too long.")]
+        public string Name { get; set; }
+
+        [Required]
+        [StringLength(10, ErrorMessage = "Name is too long.")]
+        public string Department { get; set; }
+
+        [Required]
+        [StringLength(10, ErrorMessage = "Name is too long.")]
+        public string Present { get; set; }
+
+    }
+
+    private student _student = new student();
+    @inject AppDbContext DbContext
+    private void HandleValidSubmit()
+    {
+        var newStudent = new WebApplication1.Model.Student
+        {
+            Name = _student.Name,
+            Department = _student.Department,
+                Present = _student.Present
+       
+        };
+
+        DbContext.Student.Add(newStudent);
+        DbContext.SaveChanges();
+
+
+        Console.WriteLine("OnValidSubmit");
+    }
+}
